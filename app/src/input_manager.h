@@ -14,6 +14,8 @@
 
 #define MAX_GAME_CONTROLLERS 16
 
+#define MAX_GAME_CONTROLLERS 16
+
 struct input_manager {
     struct controller *controller;
     struct screen *screen;
