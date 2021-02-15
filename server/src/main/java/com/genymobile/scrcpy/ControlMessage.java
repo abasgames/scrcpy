@@ -16,6 +16,9 @@ public final class ControlMessage {
     public static final int TYPE_SET_CLIPBOARD = 8;
     public static final int TYPE_SET_SCREEN_POWER_MODE = 9;
     public static final int TYPE_ROTATE_DEVICE = 10;
+    public static final int TYPE_INJECT_GAME_CONTROLLER_AXIS = 11;
+    public static final int TYPE_INJECT_GAME_CONTROLLER_BUTTON = 12;
+    public static final int TYPE_INJECT_GAME_CONTROLLER_DEVICE = 13;
 
     private int type;
     private String text;
@@ -30,6 +33,12 @@ public final class ControlMessage {
     private int vScroll;
     private boolean paste;
     private int repeat;
+    private int gameControllerId;
+    private int gameControllerAxis;
+    private int gameControllerAxisValue;
+    private int gameControllerButton;
+    private int gameControllerButtonState;
+    private int gameControllerDeviceEvent;
 
     private ControlMessage() {
     }
@@ -86,6 +95,32 @@ public final class ControlMessage {
         ControlMessage msg = new ControlMessage();
         msg.type = TYPE_SET_SCREEN_POWER_MODE;
         msg.action = mode;
+        return msg;
+    }
+
+    public static ControlMessage createInjectGameControllerAxis(int id, int axis, int value) {
+        ControlMessage msg = new ControlMessage();
+        msg.type = TYPE_INJECT_GAME_CONTROLLER_AXIS;
+        msg.gameControllerId = id;
+        msg.gameControllerAxis = axis;
+        msg.gameControllerAxisValue = value;
+        return msg;
+    }
+
+    public static ControlMessage createInjectGameControllerButton(int id, int button, int state) {
+        ControlMessage msg = new ControlMessage();
+        msg.type = TYPE_INJECT_GAME_CONTROLLER_BUTTON;
+        msg.gameControllerId = id;
+        msg.gameControllerButton = button;
+        msg.gameControllerButtonState = state;
+        return msg;
+    }
+
+    public static ControlMessage createInjectGameControllerDevice(int id, int event) {
+        ControlMessage msg = new ControlMessage();
+        msg.type = TYPE_INJECT_GAME_CONTROLLER_DEVICE;
+        msg.gameControllerId = id;
+        msg.gameControllerDeviceEvent = event;
         return msg;
     }
 
@@ -146,4 +181,29 @@ public final class ControlMessage {
     public int getRepeat() {
         return repeat;
     }
+
+    public int getGameControllerId() {
+        return gameControllerId;
+    }
+
+    public int getGameControllerAxis() {
+        return gameControllerAxis;
+    }
+
+    public int getGameControllerAxisValue() {
+        return gameControllerAxisValue;
+    }
+
+    public int getGameControllerButton() {
+        return gameControllerButton;
+    }
+
+    public int getGameControllerButtonState() {
+        return gameControllerButtonState;
+    }
+
+    public int getGameControllerDeviceEvent() {
+        return gameControllerDeviceEvent;
+    }
+
 }
