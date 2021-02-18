@@ -265,6 +265,7 @@ execute_server(struct server *server, const struct server_params *params) {
     const char *const cmd[] = {
         "shell",
         "CLASSPATH=" DEVICE_SERVER_PATH,
+        "LD_LIBRARY_PATH=" DEVICE_SERVER_DIR,
         "app_process",
         "-Djna.boot.library.path=/data/local/tmp",
 #ifdef SERVER_DEBUGGER
