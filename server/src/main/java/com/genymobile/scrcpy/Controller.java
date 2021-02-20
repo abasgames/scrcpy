@@ -42,7 +42,7 @@ public class Controller {
         sender = new DeviceMessageSender(connection);
 
         try {
-            GameController.load_native_libraries();
+            GameController.loadNativeLibraries();
             gameControllersEnabled = true;
         } catch (UnsatisfiedLinkError e) {
             Ln.e("Could not load native libraries. Game controllers will be disabled.", e);
@@ -165,7 +165,7 @@ public class Controller {
                     int id = msg.getGameControllerId();
                     int button = msg.getGameControllerButton();
                     int state = msg.getGameControllerButtonState();
-                    
+
                     GameController controller = gameControllers.get(id);
 
                     if (controller != null) {
@@ -194,7 +194,7 @@ public class Controller {
                             } else {
                                 Ln.w("Non-existant game controller removed.");
                             }
-                            
+
                             break;
 
                         default:
