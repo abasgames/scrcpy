@@ -89,6 +89,7 @@ struct scrcpy_options {
     bool stay_awake;
     bool force_adb_forward;
     bool disable_screensaver;
+    bool forward_game_controllers;
     bool forward_key_repeat;
     bool forward_all_clicks;
     bool legacy_paste;
@@ -137,6 +138,7 @@ struct scrcpy_options {
     .stay_awake = false, \
     .force_adb_forward = false, \
     .disable_screensaver = false, \
+    .forward_game_controllers = true, \
     .forward_key_repeat = true, \
     .forward_all_clicks = false, \
     .legacy_paste = false, \
