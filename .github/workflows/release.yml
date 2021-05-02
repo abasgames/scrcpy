@@ -18,6 +18,7 @@ jobs:
           context: .
           tags: lhlaurini/scrcpy:latest
       - name: Extract files from Docker image
+        id: extract
         uses: shrink/actions-docker-extract@v1
         with:
           image: lhlaurini/scrcpy
