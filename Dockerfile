@@ -2,15 +2,26 @@
 FROM archlinux
 
 # Install system packages
-# NOTE: some packages in ownstuff seem to be borked, or at least out-of-date
 
 RUN echo 'Server = http://mirror.rackspace.com/archlinux/$repo/os/$arch' > /etc/pacman.d/mirrorlist && \
     echo -e '\n\
 [multilib]\n\
 Include = /etc/pacman.d/mirrorlist\n\
 \n\
+[ownstuff]\n\
+Server = http://martchus.no-ip.biz/repo/arch/$repo/os/$arch\n\
+Server = https://ftp.f3l.de/~martchus/$repo/os/$arch\n\
+\n\
+[pkgbuilder]\n\
+Server = https://pkgbuilder-repo.chriswarrick.com/\n\
+\n\
 ' >> /etc/pacman.conf && \
-    pacman -Syu --noconfirm android-tools base-devel git jdk8-openjdk unzip wget && \
+    pacman-key --init && \
+    pacman-key --recv-keys B9E36A7275FC61B464B67907E06FE8F53CDC6A4C && \
+    pacman-key --lsign-key B9E36A7275FC61B464B67907E06FE8F53CDC6A4C && \
+    pacman-key --recv-keys 5EAAEA16 && \
+    pacman-key --lsign-key 5EAAEA16 && \
+    pacman -Syu --noconfirm android-tools base-devel jdk8-openjdk {,mingw-w64-}{ffmpeg,meson} pkgbuilder unzip wget xxd && \
     useradd -m user && \
     echo 'user ALL=(ALL:ALL) NOPASSWD: ALL' >> /etc/sudoers && \
     echo 'Defaults env_keep += "ftp_proxy http_proxy https_proxy no_proxy"' >> /etc/sudoers
@@ -18,8 +29,7 @@ Include = /etc/pacman.d/mirrorlist\n\
 # Install AUR packages
 
 WORKDIR /tmp
-RUN su user -c 'git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si --noconfirm'
-RUN su user -c 'yay -S --noconfirm android-sdk android-sdk-build-tools-29.0.2 android-platform-30 {,mingw-w64-}{ffmpeg,meson}'
+RUN su user -c 'pkgbuilder --noconfirm android-sdk android-sdk-build-tools-29.0.2 android-platform-30'
 
 # Build scrcpy
 
@@ -44,6 +54,9 @@ RUN DIST=dist/scrcpy-win64; \
     cp platform-tools/{AdbWin{,Usb}Api.dll,adb.exe} ${DIST} && \
     cp build-win64/server/scrcpy-server ${DIST} && \
     scripts/copy-libs.sh build-win64/app/scrcpy.exe ${DIST} && \
+    xxd ${DIST}/avcodec-58.dll > avcodec-58.dll.txt && \
+    patch -i /scrcpy/.github/workflows/avcodec-fix.patch avcodec-58.dll.txt && \
+    xxd -r avcodec-58.dll.txt > ${DIST}/avcodec-58.dll && \
     cd dist && \
     tar -cJf scrcpy-win64.tar.xz scrcpy-win64 && \
     rm -r scrcpy-win64
