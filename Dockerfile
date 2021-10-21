@@ -54,9 +54,6 @@ RUN DIST=dist/scrcpy-win64; \
     cp platform-tools/{AdbWin{,Usb}Api.dll,adb.exe} ${DIST} && \
     cp build-win64/server/scrcpy-server ${DIST} && \
     scripts/copy-libs.sh build-win64/app/scrcpy.exe ${DIST} && \
-    xxd ${DIST}/avcodec-58.dll > avcodec-58.dll.txt && \
-    patch -i /scrcpy/.github/workflows/avcodec-fix.patch avcodec-58.dll.txt && \
-    xxd -r avcodec-58.dll.txt > ${DIST}/avcodec-58.dll && \
     cd dist && \
     tar -cJf scrcpy-win64.tar.xz scrcpy-win64 && \
     rm -r scrcpy-win64
