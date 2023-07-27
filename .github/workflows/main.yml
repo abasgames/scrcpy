@@ -55,7 +55,6 @@ jobs:
 
             ${{ steps.extract.outputs.destination }}/scrcpy-linux64.tar.xz
 
-            ${{ steps.extract.outputs.destination }}/scrcpy-win64.tar.xz
 
         env:
 
