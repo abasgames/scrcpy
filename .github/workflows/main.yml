@@ -1,0 +1,61 @@
+name: Build and release
+
+on:
+
+  push:
+
+    tags:
+
+      - 'v*'
+
+jobs:
+
+  build-and-release:
+
+    runs-on: ubuntu-20.04
+
+    steps:
+
+      - name: Checkout
+
+        uses: actions/checkout@v2
+
+      - name: Build Docker image
+
+        id: docker_build
+
+        uses: docker/build-push-action@v2
+
+        with:
+
+          context: .
+
+          tags: lhlaurini/scrcpy:latest
+
+      - name: Extract files from Docker image
+
+        id: extract
+
+        uses: shrink/actions-docker-extract@v1
+
+        with:
+
+          image: lhlaurini/scrcpy
+
+          path: /scrcpy/dist/.
+
+      - name: Release
+
+        uses: softprops/action-gh-release@v1
+
+        with:
+
+          files: |
+
+            ${{ steps.extract.outputs.destination }}/scrcpy-linux64.tar.xz
+
+            ${{ steps.extract.outputs.destination }}/scrcpy-win64.tar.xz
+
+        env:
+
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
