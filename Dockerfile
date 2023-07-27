@@ -40,23 +40,8 @@ RUN mkdir build-linux64 && \
     cd build-linux64 && \
     meson && \
     ANDROID_SDK_ROOT=/opt/android-sdk ninja
-RUN mkdir build-win64 && \
-    cd build-win64 && \
-    x86_64-w64-mingw32-meson && \
-    ANDROID_SDK_ROOT=/opt/android-sdk ninja
 
 # Package scrcpy
-
-RUN DIST=dist/scrcpy-win64; \
-    mkdir -p ${DIST} && \
-    wget "https://dl.google.com/android/repository/platform-tools_r31.0.2-windows.zip" && \
-    unzip "platform-tools_r31.0.2-windows.zip" && \
-    cp platform-tools/{AdbWin{,Usb}Api.dll,adb.exe} ${DIST} && \
-    cp build-win64/server/scrcpy-server ${DIST} && \
-    scripts/copy-libs.sh build-win64/app/scrcpy.exe ${DIST} && \
-    cd dist && \
-    tar -cJf scrcpy-win64.tar.xz scrcpy-win64 && \
-    rm -r scrcpy-win64
 
 RUN DIST=dist/scrcpy-linux64; \
     mkdir -p ${DIST} && \
